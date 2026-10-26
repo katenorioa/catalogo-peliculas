@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es" class="dark">
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Nueva Película</title>
+    <title>Add New Movie</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' }
@@ -18,112 +18,112 @@
 
 <div class="max-w-4xl mx-auto">
 
-    <!-- Encabezado + Botón Claro/Oscuro -->
+    <!-- Header + Theme Toggle Button -->
     <div class="mb-8 flex items-center justify-between">
         <div>
-            <span class="text-xs font-bold uppercase tracking-widest text-red-600 dark:text-red-500">Nuevo Registro</span>
-            <h1 class="text-3xl font-extrabold mt-1">Agregar Película al Catálogo</h1>
+            <span class="text-xs font-bold uppercase tracking-widest text-red-600 dark:text-red-500">New Entry</span>
+            <h1 class="text-3xl font-extrabold mt-1">Add Movie to Catalog</h1>
         </div>
         <button onclick="cambiarTema()" type="button"
                 class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 shadow-sm text-sm font-semibold transition">
             <span id="icono-tema">☀️</span>
-            <span id="texto-tema">Modo Claro</span>
+            <span id="texto-tema">Light Mode</span>
         </button>
     </div>
 
-    <!-- Contenedor Principal -->
+    <!-- Main Container -->
     <div class="grid grid-cols-1 md:grid-cols-12 gap-8 bg-white dark:bg-zinc-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xl">
 
-        <!-- Columna Izquierda: Vista previa de la imagen subida -->
+        <!-- Left Column: Image Upload Preview -->
         <div class="md:col-span-4 flex flex-col">
-            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Vista Previa del Póster</label>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Poster Preview</label>
             <div class="rounded-xl overflow-hidden border border-slate-300 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-950 flex items-center justify-center h-80 relative shadow-inner">
-                <img id="preview-img" src="" alt="Vista previa" class="w-full h-full object-cover hidden">
+                <img id="preview-img" src="" alt="Preview" class="w-full h-full object-cover hidden">
                 <span id="preview-placeholder" class="text-slate-400 dark:text-zinc-600 text-xs text-center px-4">
-                    Selecciona una imagen desde tu equipo para previsualizar la portada
+                    Select an image from your computer to preview the cover
                 </span>
             </div>
         </div>
 
-        <!-- Columna Derecha: Formulario Multipart para subir archivo y datos -->
+        <!-- Right Column: Multipart Form -->
         <div class="md:col-span-8">
             <form th:action="@{/peliculas/guardar}" th:object="${pelicula}" method="post" enctype="multipart/form-data" class="space-y-5">
 
-                <!-- Título y Subida de Archivo Local -->
+                <!-- Title & Local File Upload -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Título *</label>
-                        <input type="text" th:field="*{titulo}" placeholder="Ej. Contacto Sangriento" required
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Title *</label>
+                        <input type="text" th:field="*{titulo}" placeholder="Ex. Bloodsport" required
                                class="w-full bg-slate-50 dark:bg-zinc-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 px-4 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-red-600 text-sm">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Subir Imagen (Póster) *</label>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Upload Poster Image *</label>
                         <input type="file" name="archivoImagen" accept="image/*" required
                                onchange="mostrarVistaPreviaArchivo(this)"
                                class="w-full bg-slate-50 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 px-3 py-2 rounded-lg border border-slate-300 dark:border-zinc-700 text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-red-600 file:text-white hover:file:bg-red-700 cursor-pointer">
                     </div>
                 </div>
 
-                <!-- Descripción -->
+                <!-- Description -->
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Descripción / Sinopsis *</label>
-                    <textarea rows="3" th:field="*{descripcion}" placeholder="Escribe de qué trata la película..." required
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Description / Synopsis *</label>
+                    <textarea rows="3" th:field="*{descripcion}" placeholder="Write what the movie is about..." required
                               class="w-full bg-slate-50 dark:bg-zinc-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 px-4 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-red-600 text-sm leading-relaxed"></textarea>
                 </div>
 
-                <!-- Director y Año -->
+                <!-- Director & Year -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Director</label>
-                        <input type="text" th:field="*{director}" placeholder="Ej. Newt Arnold"
+                        <input type="text" th:field="*{director}" placeholder="Ex. Newt Arnold"
                                class="w-full bg-slate-50 dark:bg-zinc-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 px-4 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-red-600 text-sm">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Año de Lanzamiento</label>
-                        <input type="number" th:field="*{anioLanzamiento}" placeholder="Ej. 1988"
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Release Year</label>
+                        <input type="number" th:field="*{anioLanzamiento}" placeholder="Ex. 1988"
                                class="w-full bg-slate-50 dark:bg-zinc-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 px-4 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-red-600 text-sm">
                     </div>
                 </div>
 
-                <!-- Género, Calificación y Estado -->
+                <!-- Genre, Rating & Status -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Género</label>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Genre</label>
                         <select th:field="*{genero}"
                                 class="w-full bg-slate-50 dark:bg-zinc-800 text-slate-900 dark:text-white px-3 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-red-600 text-sm">
-                            <option value="">-- Sin clasificar --</option>
-                            <option value="Acción / Artes Marciales">Acción / Artes Marciales</option>
-                            <option value="Terror / Gótico">Terror / Gótico</option>
-                            <option value="Ciencia Ficción">Ciencia Ficción</option>
-                            <option value="Suspense / Thriller">Suspense / Thriller</option>
+                            <option value="">-- Unclassified --</option>
+                            <option value="Action / Martial Arts">Action / Martial Arts</option>
+                            <option value="Horror / Gothic">Horror / Gothic</option>
+                            <option value="Sci-Fi">Sci-Fi</option>
+                            <option value="Thriller">Thriller</option>
                             <option value="Drama">Drama</option>
-                            <option value="Comedia">Comedia</option>
-                            <option value="Animación">Animación</option>
+                            <option value="Comedy">Comedy</option>
+                            <option value="Animation">Animation</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Calificación (1-10)</label>
-                        <input type="number" step="0.1" min="1" max="10" th:field="*{calificacion}" placeholder="Ej. 9.0"
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Rating (1-10)</label>
+                        <input type="number" step="0.1" min="1" max="10" th:field="*{calificacion}" placeholder="Ex. 9.0"
                                class="w-full bg-slate-50 dark:bg-zinc-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 px-4 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-red-600 text-sm">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Estado</label>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">Status</label>
                         <select th:field="*{estadoVisualizacion}"
                                 class="w-full bg-slate-50 dark:bg-zinc-800 text-slate-900 dark:text-white px-3 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-red-600 text-sm">
-                            <option value="Pendiente">Pendiente por ver</option>
-                            <option value="Vista">Vista</option>
-                            <option value="Favorita">Favorita ★</option>
+                            <option value="Pending">Pending to watch</option>
+                            <option value="Watched">Watched</option>
+                            <option value="Favorite">Favorite ★</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Botón Guardar -->
+                <!-- Submit Button -->
                 <div class="pt-4">
                     <button type="submit"
                             class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-red-900/20 transition duration-200">
-                        Guardar Película
+                        Save Movie to Database
                     </button>
                 </div>
 
@@ -133,7 +133,7 @@
     </div>
 </div>
 
-<!-- BOTÓN BACK FIJO ABAJO A LA DERECHA -->
+<!-- FIXED BACK BUTTON -->
 <a th:href="@{/peliculas}"
    class="fixed bottom-8 right-8 z-50 flex items-center gap-2 bg-slate-800 dark:bg-zinc-800 hover:bg-slate-700 dark:hover:bg-zinc-700 text-white font-semibold px-6 py-3 rounded-full border border-slate-600 dark:border-zinc-600 shadow-2xl transition-all duration-200 hover:scale-105">
     <span>←</span>
@@ -141,7 +141,6 @@
 </a>
 
 <script>
-    // Previsualizar archivo local seleccionado por el usuario
     function mostrarVistaPreviaArchivo(input) {
         const img = document.getElementById('preview-img');
         const placeholder = document.getElementById('preview-placeholder');
@@ -156,11 +155,10 @@
         }
     }
 
-    // Tema Claro / Oscuro
     function actualizarBotonTema() {
         const esOscuro = document.documentElement.classList.contains('dark');
         document.getElementById('icono-tema').textContent = esOscuro ? '☀️' : '🌙';
-        document.getElementById('texto-tema').textContent = esOscuro ? 'Modo Claro' : 'Modo Oscuro';
+        document.getElementById('texto-tema').textContent = esOscuro ? 'Light Mode' : 'Dark Mode';
     }
     actualizarBotonTema();
 
