@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es" class="dark">
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Películas</title>
+    <title>Movie Catalog and Classification</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class'
         }
-        // Mantener el tema elegido sin parpadeos al recargar
+        // Keep selected theme without flickering on reload
         if (localStorage.getItem('theme') === 'light') {
             document.documentElement.classList.remove('dark');
         } else {
@@ -21,79 +21,79 @@
 
 <div class="max-w-6xl mx-auto">
 
-    <!-- Encabezado + Botón Claro/Oscuro -->
+    <!-- Header + Light/Dark Toggle Button -->
     <header class="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="text-center sm:text-left">
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">
-                Catálogo y Clasificación de <span class="text-red-600">Películas</span>
+                Movie Catalog and <span class="text-red-600">Classification</span>
             </h1>
-            <p class="text-slate-500 dark:text-zinc-400 mt-1 text-sm">Explora tu colección o selecciona una tarjeta para editar su ficha técnica</p>
+            <p class="text-slate-500 dark:text-zinc-400 mt-1 text-sm">Explore your collection or select a card to edit its details</p>
         </div>
 
-        <!-- Botón Toggle Tema Claro / Oscuro -->
+        <!-- Light / Dark Theme Toggle Button -->
         <button onclick="cambiarTema()" type="button"
                 class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 shadow-sm hover:border-red-500 dark:hover:border-red-500 text-sm font-semibold transition">
             <span id="icono-tema">☀️</span>
-            <span id="texto-tema">Modo Claro</span>
+            <span id="texto-tema">Light Mode</span>
         </button>
     </header>
 
-    <!-- Barra Superior: Buscador con Botón (Delay de 4s) + Botón Agregar -->
+    <!-- Top Bar: Search Bar with Button (4s Delay) + Add Button -->
     <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-10 bg-white dark:bg-zinc-900 p-4 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-md">
 
-        <!-- Buscador con Botón al lado -->
+        <!-- Search Bar with Button -->
         <form id="form-busqueda" th:action="@{/peliculas}" method="get" class="flex flex-col sm:flex-row gap-2 w-full sm:w-2/3 items-center">
 
             <div class="relative w-full">
                 <input type="text" id="input-buscar" name="buscar" th:value="${buscar}"
-                       placeholder="Escribe el título y presiona Enter o Buscar..."
+                       placeholder="Type the title and press Enter or Search..."
                        autocomplete="off"
                        class="w-full bg-slate-50 dark:bg-zinc-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-400 px-4 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 text-sm">
 
-                <!-- Indicador de espera de 4 segundos -->
+                <!-- 4 seconds delay waiting indicator -->
                 <span id="indicador-delay" class="hidden absolute right-3 top-2.5 text-xs font-semibold text-amber-500 animate-pulse bg-slate-50 dark:bg-zinc-800 px-1">
-                    Cargando...
+                    Searching in 4s...
                 </span>
             </div>
 
-            <!-- Botón de Buscar al lado de la barra -->
+            <!-- Search Button -->
             <button type="submit"
                     class="w-full sm:w-auto bg-slate-800 dark:bg-zinc-700 hover:bg-slate-700 dark:hover:bg-zinc-600 text-white font-semibold px-5 py-2.5 rounded-lg transition duration-200 text-sm shrink-0">
-                Buscar
+                Search
             </button>
 
             <a th:if="${buscar != null and !buscar.isEmpty()}" th:href="@{/peliculas}"
                class="text-xs text-slate-500 dark:text-zinc-400 hover:text-red-600 dark:hover:text-white px-2 shrink-0">
-                Limpiar
+                Clear filter
             </a>
         </form>
 
-        <!-- Botón Agregar Película -->
+        <!-- Add Movie Button -->
         <a th:href="@{/peliculas/nueva}"
            class="w-full sm:w-auto text-center bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-2.5 rounded-lg shadow-md shadow-red-900/20 transition duration-200 text-sm shrink-0">
-            + Agregar Película
+            + Add Movie
         </a>
 
     </div>
 
-    <!-- Mensaje si no hay películas -->
+    <!-- Message if there are no movies -->
     <div th:if="${#lists.isEmpty(peliculas)}" class="text-center py-16 bg-white/60 dark:bg-zinc-900/50 rounded-2xl border border-slate-200 dark:border-zinc-800">
-        <p class="text-slate-500 dark:text-zinc-400 text-lg">No se encontraron películas registradas.</p>
+        <p class="text-slate-500 dark:text-zinc-400 text-lg">No movies registered yet.</p>
         <a th:href="@{/peliculas/nueva}" class="inline-block mt-4 text-red-600 dark:text-red-500 hover:underline font-semibold text-sm">
-            Haz clic aquí para subir la primera película
+            Click here to upload the first movie.
         </a>
     </div>
 
-    <!-- GRID DE 3 COLUMNAS -->
+    <!-- 3-COLUMN GRID -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-7">
 
         <a th:each="peli : ${peliculas}"
            th:href="@{/peliculas/detalle/{id}(id=${peli.id})}"
            class="group bg-white dark:bg-zinc-900 rounded-xl overflow-hidden border border-slate-200 dark:border-zinc-800 hover:border-red-600 dark:hover:border-red-600 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl flex flex-col">
 
-            <!-- Imagen -->
+            <!-- Image -->
             <div class="relative h-80 w-full overflow-hidden bg-slate-200 dark:bg-zinc-800">
-                <img th:src="${peli.imagenUrl}" alt="Portada"
+                <img th:src="${peli.imagenUrl}" alt="Cover"
                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
 
                 <span th:if="${peli.calificacion != null}"
@@ -107,7 +107,7 @@
                 </span>
             </div>
 
-            <!-- Contenido -->
+            <!-- Content -->
             <div class="p-5 flex-1 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between gap-2 mb-1">
@@ -123,7 +123,7 @@
                           class="bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 px-2.5 py-1 rounded font-medium">
                     </span>
                     <span th:if="${peli.genero == null or peli.genero.isEmpty()}"
-                          class="text-slate-400 dark:text-zinc-600 italic">Sin clasificar</span>
+                          class="text-slate-400 dark:text-zinc-600 italic">Unclassified</span>
 
                     <span th:if="${peli.director != null and !peli.director.isEmpty()}"
                           th:text="${peli.director}" class="truncate max-w-[120px]"></span>
@@ -134,13 +134,13 @@
     </div>
 </div>
 
-<!-- Scripts de Tema Claro/Oscuro y Delay de 4 segundos en Buscador -->
+<!-- Light/Dark Theme & 4-Second Search Delay Scripts -->
 <script>
-    // 1. Lógica del botón Claro / Oscuro
+    // 1. Light / Dark Theme Button Logic
     function actualizarBotonTema() {
         const esOscuro = document.documentElement.classList.contains('dark');
         document.getElementById('icono-tema').textContent = esOscuro ? '☀️' : '🌙';
-        document.getElementById('texto-tema').textContent = esOscuro ? 'Modo Claro' : 'Modo Oscuro';
+        document.getElementById('texto-tema').textContent = esOscuro ? 'Light Mode' : 'Dark Mode';
     }
     actualizarBotonTema();
 
@@ -152,7 +152,7 @@
         actualizarBotonTema();
     }
 
-    // 2. Lógica de Delay de 4 segundos (4000 ms) para la barra de búsqueda
+    // 2. 4-Second Delay Logic for Search Bar
     const formBusqueda = document.getElementById('form-busqueda');
     const indicadorDelay = document.getElementById('indicador-delay');
     let temporizadorBusqueda;
@@ -161,7 +161,7 @@
         event.preventDefault();
         clearTimeout(temporizadorBusqueda);
         indicadorDelay.classList.remove('hidden');
-        // Espera de 4 segundos (4000 ms)
+        // 4 seconds delay (4000 ms)
         temporizadorBusqueda = setTimeout(() => {
             formBusqueda.submit();
         }, 4000);
